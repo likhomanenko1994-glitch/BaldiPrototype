@@ -16,7 +16,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
       
@@ -36,7 +36,7 @@ jobs:
           godot --export "Android" build/BaldiPrototype.apk
       
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: BaldiPrototype-APK
-          path: build/BaldiPrototype.apk.
+          path: build/BaldiPrototype.apk
