@@ -12,7 +12,7 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:3.5.1
+      image: barichello/godot-ci:3.5
     
     steps:
       - name: Checkout
@@ -20,11 +20,11 @@ jobs:
         with:
           lfs: true
       
-      - name: Setup
+      - name: Setup Godot
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/3.5.1.stable/
-          mv godot-3.5.1-stable.mono.export_templates.x11.64 /tmp/godot-3.5.1-stable.mono.export_templates.x11.64
-          mv /tmp/godot-3.5.1-stable.mono.export_templates.x11.64 ~/.local/share/godot/export_templates/3.5.1.stable/
+          mkdir -v -p ~/.local/share/godot/export_templates/3.5.stable/
+          ls /usr/local/share/godot/export_templates/ || echo "Templates not found in expected location"
+          find / -name "*export_templates*" -type d 2>/dev/null || true
       
       - name: Create Debug Keystore
         run: |
