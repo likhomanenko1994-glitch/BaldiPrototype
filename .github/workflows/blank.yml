@@ -1,0 +1,42 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:3.5.1
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      
+      - name: Setup
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/3.5.1.stable/
+          mv godot-3.5.1-stable.mono.export_templates.x11.64 /tmp/godot-3.5.1-stable.mono.export_templates.x11.64
+          mv /tmp/godot-3.5.1-stable.mono.export_templates.x11.64 ~/.local/share/godot/export_templates/3.5.1.stable/
+      
+      - name: Create Debug Keystore
+        run: |
+          keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+      
+      - name: Build APK
+        run: |
+          mkdir -v build
+          godot --export "Android" build/BaldiPrototype.apk
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: BaldiPrototype-APK
+          path: build/BaldiPrototype.apk.
